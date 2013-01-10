@@ -19,9 +19,14 @@ mrb_eject(mrb_state *mrb, mrb_value klass)
 #ifdef _WIN32
   mciSendString("set cdaudio door open", NULL, 0, NULL);
 #else
-  int fd = open("/dev/cdrom", O_RDONLY);
+  int fd = open("/dev/cdrom", O_RDONLY | O_NONBLOCK);
   if (fd != -1) {
-    ioctl(fd, CDROMEJECT);
+  }
+  if (fd == -1) {
+    perror("open");
+  } else if (ioctl(fd, CDROMEJECT, 0) < 0) {
+    perror("ioctl");
+  } else {
     close(fd);
   }
 #endif
