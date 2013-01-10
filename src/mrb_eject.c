@@ -21,7 +21,14 @@ mrb_eject(mrb_state *mrb, mrb_value klass)
   mrb_get_args(mrb, "|o", &arg);
 
 #ifdef _WIN32
-  mciSendString("set cdaudio door open", NULL, 0, NULL);
+  if (mrb_nil_p(arg)) {
+    if (mciSendString("capability cdaudio can eject", NULL, 0, NULL) == 0)
+      arg = mrb_true_value();
+  }
+  if (mrb_type(arg) == MRB_TT_TRUE)
+    mciSendString("set cdaudio door open", NULL, 0, NULL);
+  else
+    mciSendString("set cdaudio door closed", NULL, 0, NULL);
 #else
   int fd = open("/dev/cdrom", O_RDONLY | O_NONBLOCK);
   if (fd == -1) {
