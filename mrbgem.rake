@@ -3,6 +3,6 @@ MRuby::Gem::Specification.new('mruby-eject') do |spec|
   spec.authors = 'mattn'
 
   if ENV['OS'] == 'Windows_NT'
-    spec.mruby_libs = '-lwinmm'
+    spec.linker.libraries << 'winmm'
   end
 end
