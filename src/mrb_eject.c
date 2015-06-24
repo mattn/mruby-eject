@@ -52,7 +52,7 @@ mrb_eject(mrb_state *mrb, mrb_value klass)
 
 void
 mrb_mruby_eject_gem_init(mrb_state* mrb) {
-  mrb_define_method(mrb, mrb->kernel_module, "eject", mrb_eject, ARGS_NONE());
+  mrb_define_method(mrb, mrb->kernel_module, "eject", mrb_eject, MRB_ARGS_NONE());
 }
 
 void
